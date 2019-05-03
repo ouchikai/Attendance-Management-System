@@ -17,6 +17,8 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
   };
   DateTime birthDate;
   DateTime now;
+  bool morningIconChangeFlg = true;
+  bool nightIconChangeFlg = true;
 
   @override
   void initState() {
@@ -40,7 +42,7 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
           children: <Widget>[
             _buildTitle(),
             _buildNowTextField(),
-            _buildIcons(context, deviceHeight, deviceWidth),
+            _buildIcons(deviceHeight, deviceWidth),
           ],
         ),
       ),
@@ -77,7 +79,6 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
             "${_getNow()}",
             style: TextStyle(fontSize: 30.0, color: Colors.blueAccent[200]),
           )
-          // image: AssetImage('assets/night_icon.png');
         ],
       ),
     );
@@ -88,52 +89,53 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
     return now != null ? formats[InputType.time].format(now) : "なし";
   }
 
-  // Widget _buildIcons(BuildContext context, double deviceheight, double deviceWidth) {
-  //   //デバイス画面の高さ横幅を元にアイコンの位置と間隔を計算
-  //   double iconHeight = (deviceWidth / 3).roundToDouble();
-  //   double iconWidth = (deviceWidth / 3).roundToDouble();
-  //   double iconsIntervalHeight = (deviceheight * 2 / 3).roundToDouble();
-  //   return Row(
-  //     children: <Widget>[
-  //       SizedBox(height: iconsIntervalHeight),
-  //       Expanded(
-  //         child: Image.asset('assets/morning_icon_on.png',
-  //             height: iconHeight, width: iconWidth),
-  //       ),
-  //       Expanded(
-  //         child: Image.asset('assets/night_icon_off.png',
-  //             height: iconHeight, width: iconWidth),
-  //       ),
-  //     ],
-  //   );
-  // }
-  Widget _buildIcons(BuildContext context, double deviceheight, double deviceWidth) {
+  Widget _buildIcons(double deviceheight, double deviceWidth) {
     //デバイス画面の高さ横幅を元にアイコンの位置と間隔を計算
     double iconHeight = (deviceWidth / 3).roundToDouble();
     double iconWidth = (deviceWidth / 3).roundToDouble();
     double iconsIntervalHeight = (deviceheight * 2 / 3).roundToDouble();
-    String morningIconPath = 'assets/morning_icon_on.png';
-    String nightIconPath = 'assets/night_icon_off.png';
     return Row(
       children: <Widget>[
         SizedBox(height: iconsIntervalHeight),
         Expanded(
           child: GestureDetector(
-                      onTap: _onTap(morningIconPath),
-                      child: Image.asset('$morningIconPath',
-                      height: iconHeight, 
-                      width: iconWidth),
+            child: Image.asset("${_getMorningIconPath()}",
+                height: iconHeight, width: iconWidth),
+            onTap: () {
+              setState(() {
+                morningIconChangeFlg
+                    ? morningIconChangeFlg = false
+                    : morningIconChangeFlg = true;
+              });
+            },
           ),
         ),
         Expanded(
-          child: Image.asset('$nightIconPath',
-              height: iconHeight, width: iconWidth),
+          child: GestureDetector(
+            child: Image.asset("${_getNightIconPath()}",
+                height: iconHeight, width: iconWidth),
+            onTap: () {
+              setState(() {
+                nightIconChangeFlg
+                    ? nightIconChangeFlg = false
+                    : nightIconChangeFlg = true;
+              });
+            },
+          ),
         ),
       ],
     );
   }
-  _onTap(morningIconPath){
-    print("icon tapped!");
-    morningIconPath = 'assets/morning_icon_off.png';
+
+  String _getMorningIconPath() {
+    return morningIconChangeFlg
+        ? 'assets/morning_icon_on.png'
+        : 'assets/morning_icon_off.png';
+  }
+
+  String _getNightIconPath() {
+    return nightIconChangeFlg
+        ? 'assets/night_icon_on.png'
+        : 'assets/night_icon_off.png';
   }
 }
