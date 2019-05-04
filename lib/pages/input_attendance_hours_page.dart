@@ -35,7 +35,6 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(title: Text("勤怠入力ページ")),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: ListView(
