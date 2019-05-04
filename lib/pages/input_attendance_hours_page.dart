@@ -13,12 +13,12 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
   final formats = {
     InputType.both: DateFormat("yyyy-MM-dd HH:mm:ss"),
     InputType.date: DateFormat("yyyy-MM-dd"),
-    InputType.time: DateFormat("HH:mm:ss")
+    InputType.time: DateFormat("HH時mm分ss秒")
   };
   DateTime birthDate;
   DateTime now;
   bool morningIconChangeFlg = true;
-  bool nightIconChangeFlg = true;
+  bool nightIconChangeFlg = false;
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
       padding: EdgeInsets.all(30.0),
       child: Column(
         children: <Widget>[
-          Text("今日の勤務時間"),
+          Text("現在の時刻"),
           Text(
             "${_getNow()}",
             style: TextStyle(fontSize: 30.0, color: Colors.blueAccent[200]),
@@ -84,7 +84,6 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
     );
   }
 
-  // 追加
   String _getNow() {
     return now != null ? formats[InputType.time].format(now) : "なし";
   }
@@ -93,7 +92,8 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
     //デバイス画面の高さ横幅を元にアイコンの位置と間隔を計算
     double iconHeight = (deviceWidth / 3).roundToDouble();
     double iconWidth = (deviceWidth / 3).roundToDouble();
-    double iconsIntervalHeight = (deviceheight * 2 / 3).roundToDouble();
+    double iconsIntervalHeight = (deviceheight * 4 / 5).roundToDouble();
+
     return Row(
       children: <Widget>[
         SizedBox(height: iconsIntervalHeight),
@@ -102,26 +102,17 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
             child: Image.asset("${_getMorningIconPath()}",
                 height: iconHeight, width: iconWidth),
             onTap: () {
-              setState(() {
-                morningIconChangeFlg
-                    ? morningIconChangeFlg = false
-                    : morningIconChangeFlg = true;
-              });
+              _registerAttenndanceTime();
             },
           ),
         ),
         Expanded(
           child: GestureDetector(
-            child: Image.asset("${_getNightIconPath()}",
-                height: iconHeight, width: iconWidth),
-            onTap: () {
-              setState(() {
-                nightIconChangeFlg
-                    ? nightIconChangeFlg = false
-                    : nightIconChangeFlg = true;
-              });
-            },
-          ),
+              child: Image.asset("${_getNightIconPath()}",
+                  height: iconHeight, width: iconWidth),
+              onTap: () {
+                _registerAttenndanceTime();
+              }),
         ),
       ],
     );
@@ -137,5 +128,44 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
     return nightIconChangeFlg
         ? 'assets/night_icon_on.png'
         : 'assets/night_icon_off.png';
+  }
+
+  void _registerAttenndanceTime() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('出勤時間の登録'),
+            content: SingleChildScrollView(
+                child: ListBody(children: <Widget>[
+              Text('出勤時間を'),
+              Text("${_getNow()}"),
+              Text('で登録しても宜しいですか?')
+            ])),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('CANCEL'),
+                onPressed: () => Navigator.pop<String>(context, 'CANCEL'),
+              ),
+              FlatButton(
+                  child: Text('OK'),
+                  onPressed: () => Navigator.pop<String>(context, 'OK'))
+            ],
+          );
+        }).then<void>((value) => setIconPath(value));
+  }
+
+  void setIconPath(String value) {
+    if (value == 'OK')
+    setState(() {
+      if (morningIconChangeFlg == true && nightIconChangeFlg == false) {
+        morningIconChangeFlg = false;
+        nightIconChangeFlg = true;
+      } else if (morningIconChangeFlg == false && nightIconChangeFlg == true) {
+        morningIconChangeFlg = true;
+        nightIconChangeFlg = false;
+      }
+    });
   }
 }
