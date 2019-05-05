@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './pages/input_attendance_hours_page.dart';
+import './pages/call_phone_page.dart';
 
 void main() => runApp(new MyApp());
 
@@ -26,12 +27,13 @@ class _RootPageState extends State<RootPage> {
       appBar: AppBar(
         title: Text('勤怠管理アプリ'),
       ),
-      body: InputAttendanceHoursPage(),
+      body: CallPhonePage(),
       drawer: _getMailAccountDrwer(),
     );
   }
 }
-Drawer _getMailAccountDrwer(){
+
+Drawer _getMailAccountDrwer() {
   var drawerIcons = [
     Icon(Icons.work),
     Icon(Icons.inbox),
@@ -71,42 +73,37 @@ Drawer _getMailAccountDrwer(){
     "Settings",
     "Help & feedback"
   ];
-  Text email = new Text(
-    "ko.rikujyou1114@gmail.com",
-    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0)
-  );
-  Text name = new Text(
-    "Kai Ouchi",
-    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0)
-  );
+  Text email = new Text("ko.rikujyou1114@gmail.com",
+      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0));
+  Text name = new Text("Kai Ouchi",
+      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0));
   return Drawer(
     child: Column(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Colors.blueAccent),
-              accountName: name,
-              accountEmail: email,
-              currentAccountPicture: Icon(
-                Icons.account_circle,
-                size: 50.0,
-                color: Colors.white,
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: ListView.builder(
-                padding: EdgeInsets.only(top: 0.0),
-                itemCount: drawerText.length,
-                itemBuilder: (context, position){
-                  return ListTile(
-                    leading: drawerIcons[position],
-                    title: Text(drawerText[position],
-                      style: TextStyle(fontSize: 15.0)
-                    ),
-                  );
-                }
-            ),)
-          ],
+      children: <Widget>[
+        UserAccountsDrawerHeader(
+          decoration: BoxDecoration(color: Colors.blueAccent),
+          accountName: name,
+          accountEmail: email,
+          currentAccountPicture: Icon(
+            Icons.account_circle,
+            size: 50.0,
+            color: Colors.white,
+          ),
         ),
+        Expanded(
+          flex: 2,
+          child: ListView.builder(
+              padding: EdgeInsets.only(top: 0.0),
+              itemCount: drawerText.length,
+              itemBuilder: (context, position) {
+                return ListTile(
+                  leading: drawerIcons[position],
+                  title: Text(drawerText[position],
+                      style: TextStyle(fontSize: 15.0)),
+                );
+              }),
+        )
+      ],
+    ),
   );
 }
