@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'mail_generator.dart';
 import 'mail_content.dart';
+import '../main.dart';
+import 'drawer_generator.dart';
 
 class CallPhonePage extends StatefulWidget {
   @override
@@ -11,7 +13,11 @@ class _CallPhonePageState extends State<CallPhonePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('電話可能一覧'),
+      ),
       body: _callPhoneListGenerator(),
+      drawer: CommonDrawerGenarator(),
     );
   }
 }

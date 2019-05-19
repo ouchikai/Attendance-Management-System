@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'dart:async';
+import 'drawer_generator.dart';
 
 class InputAttendanceHoursPage extends StatefulWidget {
   @override
@@ -35,6 +36,9 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("勤務時間入力"),
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: ListView(
@@ -45,6 +49,7 @@ class _InputAttendanceHoursState extends State<InputAttendanceHoursPage> {
           ],
         ),
       ),
+      drawer: CommonDrawerGenarator(),
     );
   }
 
